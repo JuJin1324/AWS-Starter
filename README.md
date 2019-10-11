@@ -32,7 +32,7 @@ AWS(Amazon Web Services) 시작을 위한 정리
 * 터미널 접속
 * .pem 권한 변경 예시)   
 `$ chmod 400 ~/Documents/dev/authentication/AWS_Study_Key.pem`
-* ssh 접속 예시)
+* ssh 접속 예시)   
 `$ ssh -i ~/Documents/dev/authentication/AWS_Study_Key.pem ec2-user@[퍼블릭 DNS(IPv4)]`
 
 * 참조 링크 : [[OS X] 맥 기본 터미널로 AWS EC2 터미널 접속하는 방법](http://blog.freezner.com/archives/1249)
