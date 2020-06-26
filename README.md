@@ -1,83 +1,55 @@
 # AWS-Starter
 AWS(Amazon Web Services) 시작을 위한 정리
 
-## 1.AWS 시작하기
-### AWS 가입 및 로그인
-* [AWS](https://aws.amazon.com/ko/console/) 에서 회원가입 및 로그인
+## AWS 기초 정리
+### Region, Availability Zone , Edge Location
+참조링크: [AWS Region , Availability Zone , Edge Location 이란?](https://interconnection.tistory.com/39)
 
-## 컴퓨팅 : EC2(Elastic Compute Cloud)
-* 크기 조정 가능한 컴퓨팅 파워를 제공하는 웹 서비스
+## AWS IAM
+참조링크: [AWS IAM: IAM Policy 알아보기 (이론편)](https://musma.github.io/2019/11/05/about-aws-iam-policy.html)
 
-* 이러한 가상화 서버(Virtual Server)를 '인스턴스(instance)'라 부르며, 필요에 따라 한 개의 인스턴스에서 수천 개의 인스턴스로 손쉽게 컴퓨팅 파워를 확장할 수 있다.
+## AWS Lambda
+[[AWS Lambda 초보자를 위한 개략적 설명]]   
+람다 실습 영상 자료(유투브): [AWS Lambda - 동빈나](https://www.youtube.com/watch?v=7uEDep9DFJs&list=PLRx0vPvlEmdD_AdG6fEwcfVrq5Qb3q_Ja&index=1)   
+[AWS Lambda Layer를 사용하는 방법 (How to use AWS Lambda Layers)](https://medium.com/@rabter/aws-lambda-layer%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95-how-to-use-aws-lambda-layers-c206ba40d4cc)
 
-### 주요특징
-* 한 개에서 수천 개의 인스턴스로 확장 가능
-* 필요에 따라 인스턴스의 생성, 시작, 수정, 중단, 삭제 가능
-* Linux/Windows OS 사용 가능하며 모든 소프트웨어 설치 가능
-* 사용한 사용량에 대해서만 시간 단위 비용 과금
-* 다양한 비용 모델(온디맨드, 스팟, 예약) 선택 가능
+## AWS Chalice
+Chalice 시작하기: [AWS Chalice Quickstart and Tutorial](https://aws.github.io/chalice/quickstart.html)   
+[HTTP 압축 (2) : HTTP 압축 작동 원리](http://www.simpleisbest.net/archive/2005/07/18/185.aspx)   
+[Amazon S3 버킷에 대한 액세스 권한을 Lambda 실행 역할에 허용하려면 어떻게 해야 합니까?](https://aws.amazon.com/ko/premiumsupport/knowledge-center/lambda-execution-role-s3-bucket/)  
 
-### EC2 인스턴스 유형
-* 범용(M 시리즈), 컴퓨팅 최적화(C 시리즈), 스토리지 최적화(I 시리즈, D 시리즈), GPU 최적화(G 시리즈), 메모리 최적화(R 시리즈)
-  
-### EC2 인스턴스 구매 옵션
-구분 | 내용 
------|-----
-온디맨드 인스턴스 | 필요할 때 바로 생성해서 사용하는 방식으로 인스턴스에 대해 초 단위 비용 지불
-예약 인스턴스 | 1년 또는 3년의 기간에 대한 약정을 통해 온디맨드보다 최대 75% 저렴한 비용을 지불
-스팟 인스턴스 | 경매 방식의 인스턴스로 스팩을 정해 비용을 입찰하여, 높은 가격을 입력한 사용자에게 인스턴스가 할당
-전용 인스턴스 | 고객 전용의 하드웨어에서 인스턴스 서비스를 제공
+## AWS Best Practice(규칙)
+### Security Group(보안 그룹)
+* 규칙1: 보안 그룹은 EC2 인스턴스 당 생성이 아닌 Application 당 생성으로 하여 동일 Application을 구동하는 EC2 인스턴스 들에 동일한 Security Group을 붙일 수 있도록 한다.
+* 규칙2: HTTP(80) 혹은 HTTPS(443)을 제외한 포트에 대해서는 구체적인 IP만 허용하도록 한다.
 
-### Linux 인스턴스 생성
-* (AWS)[https://aws.amazon.com/ko/] 콘솔 로그인 - 서비스 - EC2 - 인스턴스 시작 버튼 - 목적에 맞는 리눅스 종류 선택(공부목적은 프리 티어 사용)
+## EC2 instance에 접속 계정 추가하기
+EC2 instance에 접속을 허용을 추가할 계정으로 로그인
 
-### SSH 접속(macOS)
-* 터미널 접속
-* .pem 권한 변경 예시)   
-`$ chmod 400 ~/Documents/dev/authentication/AWS_Study_Key.pem`
-* ssh 접속   
-  * 퍼블릭 DNS(IPv4)는 AWS - 서비스 - EC2 - 인스턴스 - 테이블에서 해당 인스턴스 선택 - 아래 퍼블릭 DNS(IPv4) 복사
-예시)   
-`$ ssh -i ~/Documents/dev/authentication/AWS_Study_Key.pem ec2-user@[퍼블릭 DNS(IPv4)]`
+### 키 페어 생성
+> AWS Management Console 접속 -> EC2 -> 왼쪽 메뉴바에서 네트워크 및 보안 아래 **키 페어** 클릭 -> 키 페어 생성 -> 키 페어 이름 입력 및 파일 형식을 pem으로 지정
+> 다운로드 받은 파일을 적절한 곳에 위치
 
-* 참조 링크 : [[OS X] 맥 기본 터미널로 AWS EC2 터미널 접속하는 방법](http://blog.freezner.com/archives/1249)
+### 공개키 키 생성
+> .pem 파일(개인 키)이 존재하는 디렉터리로 이동 : `cd [pem 존재 디렉터리]`
+> .ssh 디렉터리에 공개키 생성: `sudo ssh-keygen -y -f [pem 명].pem > $HOME/.ssh/[public key 명].pub`
+> .pem 파일 퍼미션 변경: `sudo chmod 600 [pem 명].pem`
+> EC2 instance에 접속이 가능한 계정을 통해서 위에서 생성한 공개키를 EC2에 전송: `scp -l 50000 ~/.ssh/[public key 명].pub ec2-user@[ec2 public IP]:/home/ec2-user/.ssh`
+> EC2 instance에 SSH 접속하여 $HOME/.ssh/aws_bastion_key.pub 파일의 내용을 bastion 호스트의 ~/.ssh/authorized_keys의 맨 마지막에 추가
+``` shell
+cd ~/.ssh
+cat [public key 명].pub >> authorized_keys
+```
 
-### 스토리지 : EBS(Elastic Block Storage)
-* 서버용 하드디스크
-* 크기/사용 기간을 기준으로 비용 과금
-* 스냅샷 기능을 이용하여 EBS 볼률의 데이터를 S3에 백업 및 보관 가능
+### 추가된 계정의 키로 접속해보기
+``` shell
+cd [pem 존재 디렉터리]
+ssh -ti [pem 명].pem -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" ec2-user@[ec2 public IP]
+```
 
-* EBS 스냅샷 특징
- * 스냅샷 진행 과정 중에도 EBS나 EC2의 서비스 중단 없이 기존 서비스를 즉시 사용 가능
- * EBS 볼륨의 크기 조정에 사용될 수 있다. 보통 Disk 크기를 늘리는 작업을 수행하는 경우 기존의 Disk 스냅샷으로 백업 후 신규로 장착할 EBS의 크기를 늘려서 볼륨의 사이즈를 늘릴 수 있다.
- * 스냅샷 공유 기능을 활용하여 권한이 있는 다른 사용자에게 공유할 수 있다.
-
-### 보안 : Amazon Security Group
-* 보안 그룹(Security Group)은 인스턴스에 대한 인바운드(inbound), 아웃바운드(outbound)의 네트워크 트래픽을 제어하는 `가상의 방화벽 역할`을 수행
-* 보안 그룹은 네트워크 트래픽에 대한 `허용(Allow)`만 가능하며, '차단(Deny)'은 설정할 수 없다.
-* 차단 기능을 적용하기 위해서는 VPC의 기능 중 하나인 `Network ACL`을 통해 `서브넷(Subnet)수준`에서 네트워크의 흐름을 제어할 수 있다.
-* VPC 및 서브넷 참고 링크 : [가장쉽게 VPC 개념잡기](https://medium.com/harrythegreat/aws-가장쉽게-vpc-개념잡기-71eef95a7098)
-
-### 분석 : Kinesis
-* 대량의 데이터를 저장 분류할 수 있는 서비스입니다. 대양한 규모의 스트리밍 데이터를 비용 효율적으로 처리할 수 있는 기능과 애플리케이션 요구사항에 따라 가장 적합한 도구를 선택할 수 있는 유연성을 제공합니다. 또한 머신러닝, 분석 및 기타 애플리케이션을 위해 비디오, 오디오, 애플리케이션 로그, 웹 사이트 클릭스트림 및 IoT 텔레메트리 데이터와 같은 실시간 데이터를 수집할 수 있습니다.
-* 텔레메트리 : 원격지의 상태를 감시 및 제어하기 위해 기계간 데이터를 전송하는 서비스
-* Kinesis firehose
-
-### 분석 : EMR
-* 저장된 대량의 데이터를 분류하고 분석하여 필요한 정보를 뽑아낼 수 있도록 다양한 서비스를 제공
-
-### 스토리지 : S3(Simple Storage Services)
-* 여러 가지 용도로 사용할 수 있는 범용적인 스토리지 서비스로 데이터 보관 이외에도 정적 웹 사이트 호스팅 및 다양한 형태의 서비스로 활용 가능한 만능 스토리지 서버(파일 저장용 서버) 서버
- * S3 Data Lake
-
-### 데이터베이스 : DynamoDB
-
-### 데이터베이스 : ElastiCache
-
-### 보안
-서비스 | 설명 
------|-----
-IAM | 리소스에 대한 사용자 엑세스 및 암호화 키 관리 서비스
-AWS Shield | DDos 보호
-Amazon GaurdDuty | 관리형 위험탐지 서비스
-AWS WAF(Web Application Firewall) | 악성 웹 트래픽 필터링
+## SSH 터널링 + bastion Host를 통한 EC2 Instance 접속
+``` shell
+ssh -t -o ProxyCommand="ssh -W %h:%p ec2-user@[bastion host의 ip] -i [bastion에 접근할 때 사용하는 개인키 명].pem" ec2-user@[터널링을 통해 접속할 서버 IP] -i [터널링을 통해 접속할 서버에 사용하는 개인키 명].pem
+```
+> 터널링을 통해 접속할 서버의 개인키는 위의 **EC2 instance에 접속 계정 추가하기** 에서 자신의 개인키로 공개키를 생성한 이후에 터널링을 통해 접속할 EC2 Instance를 만든 사람에게 생성한 공개키를 전달해준다.
+> 전달 받은 사람은 해당 공개키의 내용을 ~/.ssh/authorized_keys 파일에 추가한다.
