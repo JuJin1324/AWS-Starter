@@ -51,5 +51,5 @@ ssh -ti [pem 명].pem -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyCheckin
 ``` shell
 ssh -t -o ProxyCommand="ssh -W %h:%p ec2-user@[bastion host의 ip] -i [bastion에 접근할 때 사용하는 개인키 명].pem" ec2-user@[터널링을 통해 접속할 서버 IP] -i [터널링을 통해 접속할 서버에 사용하는 개인키 명].pem
 ```
-> 터널링을 통해 접속할 서버의 개인키는 위의 **EC2 instance에 접속 계정 추가하기** 에서 자신의 개인키로 공개키를 생성한 이후에 터널링을 통해 접속할 EC2 Instance를 만든 사람에게 생성한 공개키를 전달해준다.
+> 터널링을 통해 접속할 서버의 개인키는 위의 [EC2 instance에 접속 계정 추가하기](https://github.com/JuJin1324/AWS-Starter/blob/master/README.md#ec2-instance%EC%97%90-%EC%A0%91%EC%86%8D-%EA%B3%84%EC%A0%95-%EC%B6%94%EA%B0%80%ED%95%98%EA%B8%B0)에서 자신의 개인키로 공개키를 생성한 이후에 터널링을 통해 접속할 EC2 Instance를 만든 사람에게 생성한 공개키를 전달해준다.
 > 전달 받은 사람은 해당 공개키의 내용을 ~/.ssh/authorized_keys 파일에 추가한다.
