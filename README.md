@@ -23,12 +23,11 @@ Chalice 시작하기: [AWS Chalice Quickstart and Tutorial](https://aws.github.i
 * 규칙1: 보안 그룹은 EC2 인스턴스 당 생성이 아닌 Application 당 생성으로 하여 동일 Application을 구동하는 EC2 인스턴스 들에 동일한 Security Group을 붙일 수 있도록 한다.
 * 규칙2: HTTP(80) 혹은 HTTPS(443)을 제외한 포트에 대해서는 구체적인 IP만 허용하도록 한다.
 
-## EC2 instance에 접속 계정 추가하기
-EC2 instance에 접속을 허용을 추가할 계정으로 로그인
-
-### 키 페어 생성
-> AWS Management Console 접속 -> EC2 -> 왼쪽 메뉴바에서 네트워크 및 보안 아래 **키 페어** 클릭 -> 키 페어 생성 -> 키 페어 이름 입력 및 파일 형식을 pem으로 지정
-> 다운로드 받은 파일을 적절한 곳에 위치
+## 남이 만든 EC2 Instance에 접속 계정 추가하기
+> 기본적으로 EC2 Instance 생성 때 키 페어를 생성 혹은 기존의 키 페어를 사용하여 생성하기 때문에 자신이 만든 인스턴스의 경우 따로 공개키를 EC2 Instance에 등록할 필요가 없다.    
+>    
+> 하지만 남이 만든 EC2 Instance에 접속하기 위해서는 해당 EC2 Instance에 키 페어 생성을 통해 받은 나의 .pem파일(개인키)를 이용하여 공개키를 만들고
+EC2 Instance를 만든 혹은 접속이 가능한 사람에게 부탁하여 ~/.ssh/autorized_keys 파일에 공개키의 내용을 추가해야한다.
 
 ### 공개키 키 생성
 > .pem 파일(개인 키)이 존재하는 디렉터리로 이동 : `cd [pem 존재 디렉터리]`
@@ -48,9 +47,12 @@ ssh -ti [pem 명].pem -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyCheckin
 ```
 
 ## SSH 터널링 + bastion Host를 통한 EC2 Instance 접속
+> bastion Host(EC2 Instance) 및 접속하려는 EC2 Instance 모두 자신이 만들었으며 키 페어가 같은 경우 "[bastion에 접근할 때 사용하는 개인키 명].pem" 과
+"[터널링을 통해 접속할 서버에 사용하는 개인키 명].pem" 모두 동일한 키 명을 사용하면 된다.
 ``` shell
 ssh -t -o ProxyCommand="ssh -W %h:%p ec2-user@[bastion host의 ip] -i [bastion에 접근할 때 사용하는 개인키 명].pem" ec2-user@[터널링을 통해 접속할 서버 IP] -i [터널링을 통해 접속할 서버에 사용하는 개인키 명].pem
 ```
-> 터널링을 통해 접속할 서버의 개인키는 위의 [EC2 instance에 접속 계정 추가하기](https://github.com/JuJin1324/AWS-Starter/blob/master/README.md#ec2-instance%EC%97%90-%EC%A0%91%EC%86%8D-%EA%B3%84%EC%A0%95-%EC%B6%94%EA%B0%80%ED%95%98%EA%B8%B0)에서 자신의 개인키로 공개키를 생성한 이후에 터널링을 통해 접속할 EC2 Instance를 만든 사람에게 생성한 공개키를 전달해준다.   
->   
-> 전달 받은 사람은 해당 공개키의 내용을 ~/.ssh/authorized_keys 파일에 추가한다.
+
+### 참고자료
+* [150. [SSH, Network] SSH 포트 포워딩(SSH 터널링)의 개념 및 사용 방법](https://m.blog.naver.com/PostView.nhn?blogId=alice_k106&logNo=221364560794&proxyReferer=https:%2F%2Fwww.google.com%2F)
+* [ProxyCommand를 이용한 SSH 중계 접속](http://w.cublr.com/application/openssh/proxycommand/)
