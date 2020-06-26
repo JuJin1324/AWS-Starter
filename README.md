@@ -30,10 +30,10 @@ Chalice 시작하기: [AWS Chalice Quickstart and Tutorial](https://aws.github.i
 EC2 Instance를 만든 혹은 접속이 가능한 사람에게 부탁하여 ~/.ssh/autorized_keys 파일에 공개키의 내용을 추가해야한다.
 
 ### 공개키 키 생성
-> .pem 파일(개인 키)이 존재하는 디렉터리로 이동 : `cd [pem 존재 디렉터리]`
-> .ssh 디렉터리에 공개키 생성: `sudo ssh-keygen -y -f [pem 명].pem > $HOME/.ssh/[public key 명].pub`
-> .pem 파일 퍼미션 변경: `sudo chmod 600 [pem 명].pem`   
-> 내가 만든 공개키를 해당 EC2 Instance 만든 사람에게 전달
+> .pem 파일(개인 키)이 존재하는 디렉터리로 이동 : `cd [pem 존재 디렉터리]`  
+> .ssh 디렉터리에 공개키 생성: `sudo ssh-keygen -y -f [pem 명].pem > $HOME/.ssh/[public key 명].pub`  
+> .pem 파일 퍼미션 변경: `sudo chmod 600 [pem 명].pem`     
+> 내가 만든 공개키를 해당 EC2 Instance 만든 사람에게 전달  
 
 ### 공개키 등록(EC2 Instance 주인이 할 일)
 > 위에서 생성한 공개키를 전달받아 EC2에 전송
