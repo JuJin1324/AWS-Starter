@@ -54,8 +54,8 @@ ssh -ti [pem 명].pem -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyCheckin
 ```
 
 ## SSH 터널링 + bastion Host를 통한 EC2 Instance 접속
-> bastion Host(EC2 Instance) 및 접속하려는 EC2 Instance 모두 자신이 만들었으며 키 페어가 같은 경우 "[bastion에 접근할 때 사용하는 개인키 명].pem" 과
-"[터널링을 통해 접속할 서버에 사용하는 개인키 명].pem" 모두 동일한 키 명을 사용하면 된다.
+> bastion Host(EC2 Instance) 및 접속하려는 EC2 Instance 모두 자신이 만들었으며 키 페어가 같은 경우 "[bastion에 등록된 공개키의 개인키 명].pem" 과
+"[터널링을 통해 접속할 EC2에 등록된 공개키의 개인키 명].pem" 모두 동일한 키 명을 사용하면 된다.
 ``` shell
 ssh -t -o ProxyCommand="ssh -W %h:%p ec2-user@[bastion host의 ip] -i [bastion에 접근할 때 사용하는 개인키 명].pem" ec2-user@[터널링을 통해 접속할 서버 IP] -i [터널링을 통해 접속할 서버에 사용하는 개인키 명].pem
 ```
