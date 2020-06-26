@@ -23,7 +23,7 @@ Chalice 시작하기: [AWS Chalice Quickstart and Tutorial](https://aws.github.i
 * 규칙1: 보안 그룹은 EC2 인스턴스 당 생성이 아닌 Application 당 생성으로 하여 동일 Application을 구동하는 EC2 인스턴스 들에 동일한 Security Group을 붙일 수 있도록 한다.
 * 규칙2: HTTP(80) 혹은 HTTPS(443)을 제외한 포트에 대해서는 구체적인 IP만 허용하도록 한다.
 
-## 남이 만든 EC2 Instance에 접속 계정 추가하기
+## 남이 만든 EC2 Instance에 접속하기
 > 기본적으로 EC2 Instance 생성 때 키 페어를 생성 혹은 기존의 키 페어를 사용하여 생성하기 때문에 자신이 만든 인스턴스의 경우 따로 공개키를 EC2 Instance에 등록할 필요가 없다.    
 >    
 > 하지만 남이 만든 EC2 Instance에 접속하기 위해서는 해당 EC2 Instance에 키 페어 생성을 통해 받은 나의 .pem파일(개인키)를 이용하여 공개키를 만들고
@@ -32,15 +32,22 @@ EC2 Instance를 만든 혹은 접속이 가능한 사람에게 부탁하여 ~/.s
 ### 공개키 키 생성
 > .pem 파일(개인 키)이 존재하는 디렉터리로 이동 : `cd [pem 존재 디렉터리]`
 > .ssh 디렉터리에 공개키 생성: `sudo ssh-keygen -y -f [pem 명].pem > $HOME/.ssh/[public key 명].pub`
-> .pem 파일 퍼미션 변경: `sudo chmod 600 [pem 명].pem`
-> EC2 instance에 접속이 가능한 계정을 통해서 위에서 생성한 공개키를 EC2에 전송: `scp -l 50000 ~/.ssh/[public key 명].pub ec2-user@[ec2 public IP]:/home/ec2-user/.ssh`
-> EC2 instance에 SSH 접속하여 $HOME/.ssh/aws_bastion_key.pub 파일의 내용을 bastion 호스트의 ~/.ssh/authorized_keys의 맨 마지막에 추가
+> .pem 파일 퍼미션 변경: `sudo chmod 600 [pem 명].pem`   
+> 내가 만든 공개키를 해당 EC2 Instance 만든 사람에게 전달
+
+### 공개키 등록(EC2 Instance 주인이 할 일)
+> 위에서 생성한 공개키를 전달받아 EC2에 전송
+``` shell
+cd [전달받은 공개키가 있는 디렉터리]
+scp -l 50000 [전달받은 공개키 명].pub ec2-user@[ec2 public IP]:/home/ec2-user/.ssh
+```
+> EC2 instance에 SSH 접속하여 전달받은 공개키 내용을 authorized_keys 에 추가
 ``` shell
 cd ~/.ssh
-cat [public key 명].pub >> authorized_keys
+cat [전달받은 공개키 명].pub >> authorized_keys
 ```
 
-### 추가된 계정의 키로 접속해보기
+### EC2 Instance에 접속해보기(내가 할 일)
 ``` shell
 cd [pem 존재 디렉터리]
 ssh -ti [pem 명].pem -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" ec2-user@[ec2 public IP]
